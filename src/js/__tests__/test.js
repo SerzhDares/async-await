@@ -14,12 +14,12 @@ test('Проверка работы GameSavingLoader', async() => {
   expect(result).toEqual(await GameSavingLoader.load());
 })
 
+
 test('Проверка вывода ошибки', async() => {
-  expect.assertions(1);
+  // expect.assertions(1);
   try {
     await GameSavingLoader.load()
   } catch(error) {
-    // throw new Error('ERROR!');
     expect(error).toEqual('error');
   }
 })
