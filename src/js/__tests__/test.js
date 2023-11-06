@@ -1,4 +1,22 @@
 import GameSavingLoader from '../GameSavingLoader';
+import read from '../reader'
+
+
+afterEach(() => jest.resetModules());
+
+jest.mock('../reader', () =>
+  jest.fn().mockImplementationOnce(() => Promise.reject('Error parsing data'))
+);
+
+test('Должен ловить ошибку', async () => {
+  try {
+    await GameSavingLoader.load();
+  } catch (err) {
+    expect(err).toBe('Error parsing data');
+  }
+});
+
+read.mockImplementationOnce(() => jest.requireActual('../reader').default());
 
 test('Проверка работы GameSavingLoader', async() => {
   const result = JSON.stringify({
@@ -12,14 +30,4 @@ test('Проверка работы GameSavingLoader', async() => {
     }
   })
   expect(result).toEqual(await GameSavingLoader.load());
-})
-
-
-test('Проверка вывода ошибки', async() => {
-  // expect.assertions(1);
-  try {
-    await GameSavingLoader.load()
-  } catch(error) {
-    expect(error).toEqual('error');
-  }
 })
